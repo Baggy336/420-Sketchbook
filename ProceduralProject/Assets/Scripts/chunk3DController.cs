@@ -18,6 +18,8 @@ public class chunk3DController : MonoBehaviour
     [Tooltip("How much to scale the noisefield")]
     public float zoom = 10;
 
+    private bool _shouldRegen = false;
+
     private void Start()
     {
         GenerateVoxels();
@@ -26,7 +28,15 @@ public class chunk3DController : MonoBehaviour
     private void OnValidate()
     {
         if (!Application.isPlaying) return;
-        GenerateVoxels();
+        _shouldRegen = true;
+    }
+    private void Update()
+    {
+        if (_shouldRegen)
+        {
+            _shouldRegen = false;
+            GenerateVoxels();
+        }
     }
 
     private void GenerateVoxels()
@@ -49,6 +59,7 @@ public class chunk3DController : MonoBehaviour
 
                     float val = Noise.Perlin(pos / zoom);
 
+                    // If the threshold is met, spawn a voxelblock
                     if (val > threshold)
                     {
                         GameObject obj = Instantiate(voxelPrefab, pos, Quaternion.identity, transform);
