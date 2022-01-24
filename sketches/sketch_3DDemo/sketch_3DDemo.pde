@@ -86,7 +86,8 @@ void draw() {
   rotateX(map(mouseY, 0, height, -1, 1));
   
   // Move the chunk to the left
-  translate(-dimOfBlocks * blockSize / 2, -dimOfBlocks * blockSize / 2);
+  float d = -dimOfBlocks * blockSize / 2;
+  translate(d, d, d);
   
   for(PVector pos : blocks){
     // Push and pop matrix for each cube
