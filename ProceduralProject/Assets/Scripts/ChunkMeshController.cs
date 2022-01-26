@@ -4,22 +4,51 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))] // Tells the engine to require a meshfilter on any object with this script
+[RequireComponent(typeof(MeshCollider))] // Tells the engine to require a meshcollider on any object with this script
+
 public class ChunkMeshController : MonoBehaviour
 {
+    public enum BlendMode
+    {
+        Avg,
+        Add,
+        Mult,
+        Div,
+        Sub
+    }
+
+    [System.Serializable]
+    public class NoiseField
+    {
+        public bool isOn = true;
+        public Vector3 offset;
+        public BlendMode blendMode;
+        [Range(5, 50)]
+        public float zoom = 20;
+
+        [Range(0, 1)]
+        public float flattenAmount = 0;
+
+        [Range(-50, 50)]
+        public float flattenOffset = 0;
+    }
+
+
     [Range(4, 40)]
     public int resolution = 10;
-
-    [Range(5, 50)]
-    public float zoom = 10;
 
     [Range(0, 1)]
     public float densityThreshold = 0.5f;
 
+    public NoiseField[] fields;
+
     private MeshFilter meshFilter;
+    private MeshCollider collider;
 
     void Start()
     {
         meshFilter = GetComponent<MeshFilter>();
+        collider = GetComponent<MeshCollider>();
     }
 
     private void OnValidate()
@@ -36,7 +65,36 @@ public class ChunkMeshController : MonoBehaviour
             for (int y = 0; y < voxels.GetLength(1); y++) {
                 for (int z = 0; z < voxels.GetLength(2); z++) {
                     Vector3 pos = new Vector3(x, y, z);
-                    float density = Noise.Perlin(pos / zoom);
+
+                    float density = 0;
+
+                    foreach(NoiseField field in fields)
+                    {
+                        Vector3 noisePos = (pos + transform.position) / field.zoom + field.offset;
+
+                        float d = Noise.Perlin(noisePos);
+
+                        density -=((y - field.flattenOffset)/ 100f) * field.flattenAmount;
+
+                        switch (field.blendMode)
+                        {
+                            case BlendMode.Avg:
+                                density = (density + d) / 2;
+                                break;
+                            case BlendMode.Add:
+                                density += d;
+                                break;
+                            case BlendMode.Mult:
+                                density *= d;
+                                break;
+                            case BlendMode.Div:
+                                density /= d;
+                                break;
+                            case BlendMode.Sub:
+                                density -= d;
+                                break;
+                        }
+                    }
 
                     voxels[x, y, z] = (density > densityThreshold);
                 }
@@ -49,8 +107,7 @@ public class ChunkMeshController : MonoBehaviour
         List<Vector3> normals = new List<Vector3>();
         List<Vector2> uvs = new List<Vector2>();
 
-        // Generate the geometry
-
+        // Generate the geometry for each dimension
         for (int x = 0; x < voxels.GetLength(0); x++) {
             for (int y = 0; y < voxels.GetLength(1); y++) {
                 for (int z = 0; z < voxels.GetLength(2); z++) {
@@ -78,12 +135,22 @@ public class ChunkMeshController : MonoBehaviour
         mesh.normals = normals.ToArray();
         mesh.uv = uvs.ToArray();
         if (!meshFilter) meshFilter = GetComponent<MeshFilter>();
+        if (!collider) collider = GetComponent<MeshCollider>();
         meshFilter.mesh = mesh;
+        collider.sharedMesh = mesh;
     }
 
+    /// <summary>
+    /// This function is used to look up positions of verts, if they fall outside of the bounds of the array, this function returns false.
+    /// </summary>
+    /// <param name="arr"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="z"></param>
+    /// <returns></returns>
     bool Lookup(bool[,,] arr, int x, int y, int z)
     {
-        // Spot falls outside of the index bounds
+        // Spot falls outside of the index bounds, would crash the program.
         if (x < 0) return false;
         if (y < 0) return false;
         if (z < 0) return false;
@@ -199,6 +266,6 @@ public class ChunkMeshController : MonoBehaviour
 
     }
 
-    
-    
+
+
 }
