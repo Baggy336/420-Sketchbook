@@ -3,7 +3,11 @@ guid: f7062e85854c270488c3700f3de7d6cc
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - basicHallway: {fileID: 4054627066714845039, guid: c2719e4fa8831884ca0e926617e9bd2d, type: 3}
+  - playerStart: {instanceID: 0}
+  - playerEnd: {instanceID: 0}
+  - pointOfInterest: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

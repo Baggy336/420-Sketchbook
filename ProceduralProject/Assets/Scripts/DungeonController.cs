@@ -22,10 +22,15 @@ public class DungeonController : MonoBehaviour
 
     private void Update()
     {
-        float px = roomSize;
-        for (int x = 0; x < rooms.Length; x++)
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            for (int y = 0; y < rooms.GetLength(x); y++)
+            GenerateRooms();
+        }
+
+        float px = roomSize;
+        for (int x = 0; x < rooms.GetLength(0); x++)
+        {
+            for (int y = 0; y < rooms.GetLength(1); y++)
             {
                 int value = rooms[x, y];
                 if (value > 0)
@@ -46,16 +51,16 @@ public class DungeonController : MonoBehaviour
                             break;
 
                     }
-                    transform.position += x * px + y * px;
-                    Instantiate(objectToSpawn,);
+                    Vector3 pos = new Vector3(x * px, 0, y * px);
+                    Instantiate(objectToSpawn, pos, Quaternion.identity);
                 }
             }
         }
 
         px = roomSize * smallPerLarge;
-        for (int x = 0; x < bigRooms.Length; x++)
+        for (int x = 0; x < bigRooms.GetLength(0); x++)
         {
-            for (int y = 0; y < bigRooms.GetLength(x); y++)
+            for (int y = 0; y < bigRooms.GetLength(1); y++)
             {
                 int value = rooms[x, y];
                 if (value > 0)
@@ -75,6 +80,9 @@ public class DungeonController : MonoBehaviour
                             objectToSpawn = playerEnd;
                             break;
                     }
+                    Vector3 pos = new Vector3(x * px, 0, y * px);
+                    Instantiate(objectToSpawn, pos, Quaternion.identity);
+                    objectToSpawn.transform.localScale *= smallPerLarge;
                 }
             }
         }
@@ -99,8 +107,8 @@ public class DungeonController : MonoBehaviour
         // Make sure x and y don't fall out of bounds of the array
         if (x < 0) return 0;
         if (y < 0) return 0;
-        if (x > rooms.Length) return 0;
-        if (y > rooms.GetLength(x)) return 0;
+        if (x > rooms.GetLength(0)) return 0;
+        if (y > rooms.GetLength(1)) return 0;
 
         // If the room is within the array, return it out of the function
         return rooms[x, y];
@@ -111,8 +119,8 @@ public class DungeonController : MonoBehaviour
         // Make sure x and y don't fall out of bounds of the array
         if (x < 0) return;
         if (y < 0) return;
-        if (x > rooms.Length) return;
-        if (y > rooms.GetLength(x)) return;
+        if (x > rooms.GetLength(0)) return;
+        if (y > rooms.GetLength(1)) return;
 
         // Store the room that the GetRoom function finds in a temporary value
         int t = GetRoom(x, y);
@@ -126,8 +134,8 @@ public class DungeonController : MonoBehaviour
     {
         if (x < 0) return 0;
         if (y < 0) return 0;
-        if (x >= bigRooms.Length) return 0;
-        if (y >= bigRooms.GetLength(x)) return 0;
+        if (x > bigRooms.GetLength(0)) return 0;
+        if (y > bigRooms.GetLength(1)) return 0;
 
         return bigRooms[x, y];
     }
@@ -135,8 +143,8 @@ public class DungeonController : MonoBehaviour
     {
         if (x < 0) return;
         if (y < 0) return;
-        if (x >= bigRooms.Length) return;
-        if (y >= bigRooms.GetLength(x)) return;
+        if (x > bigRooms.GetLength(0)) return;
+        if (y > bigRooms.GetLength(1)) return;
 
         bigRooms[x, y] = temp;
     }
@@ -146,9 +154,9 @@ public class DungeonController : MonoBehaviour
         int resolution = lowRes();
         bigRooms = new int[resolution, resolution];
         
-        for(int x = 0; x < rooms.Length; x++)
+        for(int x = 0; x < rooms.GetLength(0); x++)
         {
-            for(int y = 0; y < rooms.GetLength(x); y++)
+            for(int y = 0; y < rooms.GetLength(1); y++)
             {
                 int value = GetRoom(x, y);
 
@@ -162,11 +170,11 @@ public class DungeonController : MonoBehaviour
     void WalkRooms(int roomType1, int roomType2)
     {
         // Get the length of half of the room's width and height
-        int halfWidth = rooms.Length / 2;
+        int halfWidth = rooms.GetLength(0) / 2;
         int halfHeight = rooms.GetLength(0) / 2;
 
-        int x = Random.Range(0, rooms.Length);
-        int y = Random.Range(0, rooms.GetLength(x));
+        int x = Random.Range(0, rooms.GetLength(0));
+        int y = Random.Range(0, rooms.GetLength(1));
 
         // Generate random temporary values between 0 and half Width and Height
         int tempX = Random.Range(0, halfWidth);
