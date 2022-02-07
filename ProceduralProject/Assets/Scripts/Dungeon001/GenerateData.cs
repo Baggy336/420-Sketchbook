@@ -158,8 +158,6 @@ public class GenerateData
         if (x >= smallRooms.GetLength(0)) return 0;
         if (y >= smallRooms.GetLength(1)) return 0;
 
-
-
         return smallRooms[x, y];
     }
     private void SetSmallRoom(int x, int y, int val)
@@ -170,8 +168,6 @@ public class GenerateData
         if (y < 0) return;
         if (x >= smallRooms.GetLength(0)) return;
         if (y >= smallRooms.GetLength(1)) return;
-
-
 
         smallRooms[x, y] = val;
     }
@@ -184,8 +180,6 @@ public class GenerateData
         if (x >= bigRooms.GetLength(0)) return 0;
         if (y >= bigRooms.GetLength(1)) return 0;
 
-
-
         return bigRooms[x, y];
     }
     private void SetBigRoom(int x, int y, int val)
@@ -196,8 +190,6 @@ public class GenerateData
         if (y < 0) return;
         if (x >= bigRooms.GetLength(0)) return;
         if (y >= bigRooms.GetLength(1)) return;
-
-
 
         bigRooms[x, y] = val;
     }
