@@ -142,4 +142,25 @@ public static class MeshTools
         mesh.SetTriangles(tris, 0);
         return mesh;
     }
+
+    public static Mesh MakeTriangle()
+    {
+        List<Vector3> verts = new List<Vector3>();
+        List<Vector2> uvs = new List<Vector2>();
+        List<Vector3> normals = new List<Vector3>();
+        List<int> tris = new List<int>();
+
+        // Define the bottom face
+        verts.Add(new Vector3(0, 0, 0));
+        verts.Add(new Vector3(0, 0, 1));
+        verts.Add(new Vector3(1, 0, 0));
+
+
+        Mesh mesh = new Mesh();
+        mesh.SetVertices(verts);
+        mesh.SetUVs(0, uvs);
+        mesh.SetNormals(normals);
+        mesh.SetTriangles(tris, 0);
+        return mesh;
+    }
 }
