@@ -19,6 +19,7 @@ class FlowFieldGrid {
     for (int x = 0; x < data.length; x++) {
       for (int y = 0; y < data[x].length; y++) {
         float val = noise(x / zoom, y / zoom);
+        float threshVal = noise(x / zoom, y / zoom);
         val = map(val, 0, 1, -PI * 2, PI * 2);
 
         // Detect if the cell is near the side of the screen
@@ -27,8 +28,10 @@ class FlowFieldGrid {
         if (x < threshold || y < threshold || x >= data.length - threshold || y >= data[0].length - threshold) {
           float dy = (height / (float) 2) - (y * h + h / 2);
           float dx = (width / (float) 2) - (x * w + w / 2);
-          val = atan2(dy, dx);
+          threshVal = atan2(dy, dx);
+          val = lerp(threshVal, val, .16f);
         }
+        
 
         data[x][y] = val;
       }
