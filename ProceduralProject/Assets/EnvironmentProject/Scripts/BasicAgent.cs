@@ -10,12 +10,6 @@ public class BasicAgent : MonoBehaviour
     public Transform target;
     public Transform theNest;
 
-    [Range(0.5f, 2)]
-    public float mass = 1;
-
-    [Range(5, 30)]
-    public float maxSpeed = 10;
-
     public float visDis = 100;
     public float visAngle = 180;
 
@@ -26,19 +20,11 @@ public class BasicAgent : MonoBehaviour
     private float cooldownSelect;
     private float harvestTime = 10;
     private float disToTarget;
-    private float maxForce;
-
+    
     private int resourceStorage = 0; 
-
-    public Vector3 vel;
-    private Vector3 force;
 
     private void Start()
     {
-        transform.position = new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), Random.Range(-5, 5));
-        maxSpeed = Random.Range(5, 50);
-        mass = Random.Range(.5f, 10);
-        maxForce = Random.Range(5, 15);
 
         if (GameObject.FindWithTag("Nest") != null)
         {
@@ -69,7 +55,7 @@ public class BasicAgent : MonoBehaviour
                 HarvestResource();
             }
 
-            transform.position = AnimMath.Lerp(transform.position, target.position, 0.5f) * Time.deltaTime;
+            transform.position = AnimMath.Lerp(transform.position, target.position, .99f) * Time.deltaTime;
         }
         else if (!wantsResource && !hasResource) // If the agent doesn't have a resource and doesn't want one
         {
@@ -78,24 +64,15 @@ public class BasicAgent : MonoBehaviour
         else if (hasResource)
         {
             // Fly to the nest and deposit
-            transform.position = AnimMath.Lerp(transform.position, theNest.position, .03f) * Time.deltaTime;
+            transform.position = AnimMath.Lerp(transform.position, theNest.position, .99f) * Time.deltaTime;
 
             if (disToTarget <= 4)
             {
                 DepositResource();
             }
         }
-
-        EulerStep();
     }
-    // Euler physics integration
-    void EulerStep()
-    {
-        Vector3 acceleration = force / mass;
-        acceleration += vel;
-        transform.position += acceleration;
-        force *= 0;
-    }
+    
 
     // Check the vision distance and angle compared to the resource to make sure it can be seen
     private bool FindableResource(Transform resources)

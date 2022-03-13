@@ -6,16 +6,46 @@ public class FlockController : MonoBehaviour
 {
     public List<BasicAgent> agents = new List<BasicAgent>();
 
-    private Vector3 force;
+    [Range(0.5f, 2)]
+    public float mass = 1;
 
+    [Range(5, 30)]
+    public float maxSpeed = 10;
+
+    private float maxForce;
     private float speed = 10;
-
     public float cohesionRad = 50;
     public float alignRad = 40;
     public float separationRad = 10;
     public float cohesionForce = 1;
     public float alignmentForce = .5f;
     public float separationForce = 2;
+
+    public Vector3 vel;
+    private Vector3 force;
+
+    private void Start()
+    {
+        transform.position = new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), Random.Range(-5, 5));
+        maxSpeed = Random.Range(5, 50);
+        mass = Random.Range(.5f, 10);
+        maxForce = Random.Range(5, 15);
+    }
+
+    private void Update()
+    {
+        CalculateFlock();
+        EulerStep();
+    }
+
+    // Euler physics integration
+    void EulerStep()
+    {
+        Vector3 acceleration = force / mass;
+        acceleration += vel;
+        transform.position += acceleration;
+        force *= 0;
+    }
 
     void CalculateFlock()
     {
@@ -44,7 +74,7 @@ public class FlockController : MonoBehaviour
             }
             if (dis < alignRad)
             {
-                avgAlign += a.vel;
+                avgAlign += vel;
 
                 numAlign++;
             }
@@ -57,7 +87,22 @@ public class FlockController : MonoBehaviour
             Vector3 dirToCenter = groupCenter - transform.position;
             dirToCenter *= speed;
 
-            cohesionForce = dirToCenter - agents.vel;
+            Vector3 forceCohesion = dirToCenter - vel;
+
+            Vector3.ClampMagnitude(forceCohesion, cohesionForce);
+
+            force += forceCohesion;
+        }
+        if (numAlign > 0)
+        {
+            avgAlign /= numAlign;
+            avgAlign *= speed;
+
+            Vector3 alignForce = avgAlign - vel;
+
+            Vector3.ClampMagnitude(alignForce, alignmentForce);
+
+            force += alignForce;
         }
     }
 }
