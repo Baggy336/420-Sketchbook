@@ -16,8 +16,8 @@ public class BasicAgent : MonoBehaviour
     [Range(5, 30)]
     public float maxSpeed = 10;
 
-    public float visDis = 10;
-    public float visAngle = 45;
+    public float visDis = 100;
+    public float visAngle = 180;
 
     private bool hasResource = false;
     private bool wantsResource = true;
@@ -30,7 +30,7 @@ public class BasicAgent : MonoBehaviour
 
     private int resourceStorage = 0; 
 
-    private Vector3 vel;
+    public Vector3 vel;
     private Vector3 force;
 
     private void Start()
@@ -55,21 +55,21 @@ public class BasicAgent : MonoBehaviour
         cooldownScan -= Time.deltaTime;
         cooldownSelect -= Time.deltaTime;
 
-        disToTarget = (target.transform.position - transform.position).sqrMagnitude;
+        if (target) disToTarget = (target.transform.position - transform.position).sqrMagnitude;
 
         // if the agent wants a resource and does not have one
         if (wantsResource && !hasResource)
         {
-            transform.position = AnimMath.Lerp(transform.position, target.position, 0.5f) * Time.deltaTime;
-
             if (cooldownScan <= 0 && !target) FindResource();
 
-            if (cooldownSelect <= 0) PickResource();
+            if (cooldownSelect <= 0 && !target) PickResource();
 
             if (disToTarget <= 4)
             {
                 HarvestResource();
             }
+
+            transform.position = AnimMath.Lerp(transform.position, target.position, 0.5f) * Time.deltaTime;
         }
         else if (!wantsResource && !hasResource) // If the agent doesn't have a resource and doesn't want one
         {
@@ -157,8 +157,6 @@ public class BasicAgent : MonoBehaviour
     {
         harvestTime -= Time.deltaTime;
 
-        transform.position = transform.position;
-
         if (harvestTime <= 0)
         {
             resourceStorage++;
@@ -179,8 +177,6 @@ public class BasicAgent : MonoBehaviour
     void DepositResource()
     {
         harvestTime -= Time.deltaTime;
-
-        transform.position = transform.position;
 
         if (harvestTime <= 0)
         {
