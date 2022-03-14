@@ -26,6 +26,8 @@ public class FlockController : MonoBehaviour
 
     private void Start()
     {
+        agents.Add(GetComponent<BasicAgent>());
+
         transform.position = new Vector3(Random.Range(-5, 5), Random.Range(-5, 5), Random.Range(-5, 5));
         maxSpeed = Random.Range(5, 50);
         mass = Random.Range(.5f, 10);

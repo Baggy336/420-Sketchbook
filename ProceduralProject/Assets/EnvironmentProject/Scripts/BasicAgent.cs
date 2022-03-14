@@ -7,6 +7,8 @@ public class BasicAgent : MonoBehaviour
 {
     private List<AgentResource> resource = new List<AgentResource>();
 
+    public FlockController flock;
+
     public Transform target;
     public Transform theNest;
 
