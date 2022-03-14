@@ -45,6 +45,7 @@ public class FlockController : MonoBehaviour
         acceleration += vel;
         transform.position += acceleration;
         force *= 0;
+        Debug.Log(acceleration);
     }
 
     void CalculateFlock()

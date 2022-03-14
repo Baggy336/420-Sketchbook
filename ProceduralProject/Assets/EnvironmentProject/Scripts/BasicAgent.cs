@@ -18,6 +18,7 @@ public class BasicAgent : MonoBehaviour
 
     private float cooldownScan;
     private float cooldownSelect;
+    private float cooldownWantResource;
     private float harvestTime = 10;
     private float disToTarget;
     
@@ -25,6 +26,7 @@ public class BasicAgent : MonoBehaviour
 
     private void Start()
     {
+        cooldownWantResource = Random.Range(20, 70);
 
         if (GameObject.FindWithTag("Nest") != null)
         {
@@ -44,7 +46,7 @@ public class BasicAgent : MonoBehaviour
         if (target) disToTarget = (target.transform.position - transform.position).sqrMagnitude;
 
         // if the agent wants a resource and does not have one
-        if (wantsResource && !hasResource)
+        if (wantsResource && !hasResource && cooldownWantResource <= 0)
         {
             if (cooldownScan <= 0 && !target) FindResource();
 
@@ -166,6 +168,8 @@ public class BasicAgent : MonoBehaviour
             Bank.AddResource(1);
 
             FindResource();
+
+            cooldownWantResource = Random.Range(20, 70);
         }
     }
 }
