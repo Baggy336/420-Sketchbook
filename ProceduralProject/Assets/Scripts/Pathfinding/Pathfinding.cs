@@ -8,6 +8,7 @@ public static class Pathfinding
     public class Node
     {
         public Vector3 pos;
+        public float moveCost = 1; // This value can be changed to create different types of terrain
 
         public float G { get; private set; }
         public float H { get; private set; }
@@ -19,31 +20,27 @@ public static class Pathfinding
                 return G + H;
             }
         }
-        public float moveCost = 1; // This value can be changed to create different types of terrain
 
         public List<Node> neighbors = new List<Node>();
 
-        private Node _parent;
-        public Node parent
+        public Node parent { get; private set; }
+
+        public void UpdateParentAndG(Node parent, float extraG = 0)
         {
-            get
+            this.parent = parent;
+            if (parent != null)
             {
-                return _parent;
+                G = parent.G + moveCost + extraG;
             }
-            set
+            else
             {
-                _parent = value;
-                if (_parent != null)
-                {
-                    G = _parent.G + moveCost;
-                }
-                else
-                {
-                    G = 0;
-                }
+                G = extraG;
             }
+
         }
 
+
+        // Makes an educated guess as to how far from the end we are
         public void DoHeuristic(Node end)
         {
             // Find distance between start and end 
@@ -56,14 +53,16 @@ public static class Pathfinding
 
     public static List<Node> Solve(Node start, Node end)
     {
+        if (start == null || end == null) return new List<Node>();
+
         // Opening list of considered nodes
         List<Node> open = new List<Node>();
 
-        // List of nodes which have already been considered
+        // List of nodes which have already been considered, not to be used again
         List<Node> closed = new List<Node>();
 
         // Clear the parent node and add the start to the open list
-        start.parent = null;
+        start.UpdateParentAndG(null);
         open.Add(start);
 
         // 1. Travel from start to end
@@ -83,7 +82,7 @@ public static class Pathfinding
                 }
             }
 
-            // If the node is the end 
+            // If the node is the end, stop the loop
             if (current == end)
             {
                 // break out of the loop
@@ -100,8 +99,11 @@ public static class Pathfinding
                     if (!open.Contains(neighbor))
                     {
                         open.Add(neighbor);
-                        // Set the neighbor's parent
-                        neighbor.parent = current;
+
+                        float dis = (neighbor.pos - current.pos).magnitude;
+
+                        // Set the neighbor's parent to the current tile we are checking
+                        neighbor.UpdateParentAndG(current, dis);
 
                         // If the current neighbor is the end
                         if (neighbor == end)
@@ -114,15 +116,23 @@ public static class Pathfinding
                     }
                     else // Node is in the open list already
                     {
+                        float dis = (neighbor.pos - current.pos).magnitude;
+
                         // If G cost is lower than the current stored value, change neighbor's parent to this node
-                        if (current.G + neighbor.moveCost < neighbor.G )
+                        if (current.G + neighbor.moveCost + dis < neighbor.G )
                         {
                             // Shorter to move to neighbor from current
-                            neighbor.parent = current;
+                            neighbor.UpdateParentAndG(current, dis);
                         }
                     }
                 }               
             }
+            // Add the current node to the closed list
+            closed.Add(current);
+
+            // Remove the current node from the open list so that it isn't used again
+            open.Remove(current);
+
             if (isDone) break;
         }
 
