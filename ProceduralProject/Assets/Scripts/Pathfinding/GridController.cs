@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[RequireComponent(typeof(LineRenderer))]
 public class GridController : MonoBehaviour
 {
     // A delegate is used within another function
     delegate Pathfinding.Node LookupDelegate(int x, int y);
 
-    private LineRenderer linePath;
+    // This is unneccesary, but nice to see
+    public static GridController _singleton;
+    public static GridController singleton { get; private set; }
+
 
     public TerrainCube cubePrefab;
 
@@ -18,29 +20,54 @@ public class GridController : MonoBehaviour
 
     private TerrainCube[,] cubes;
 
+    private Pathfinding.Node[,] nodes;
+
     public int size = 19;
 
     private void Start()
     {
-        linePath = GetComponent<LineRenderer>();
+        // if we already have a gridcontroller
+        if (singleton != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        // set this object to be the singleton 
+        singleton = this;
+        DontDestroyOnLoad(gameObject);
+
         MakeGrid();
+    }
+
+    private void OnDestroy()
+    {
+        // clear the singleton if this object is somehow destroyed
+        if (this == singleton) singleton = null;
     }
 
     private void Update()
     {
-        MakeNodes();
     }
 
     void MakeGrid()
     {
 
         cubes = new TerrainCube[size, size];
+        float zoom = 10;
+        float amp = 10;
 
         for (int x = 0; x < size; x++)
         {
             for (int y = 0; y < size; y++)
             {
-                cubes[x, y] = Instantiate(cubePrefab, new Vector3(x, 0, y), Quaternion.identity);
+                // this can be used for generating an elevated terrain to pathfind across
+                float verticalPos = Mathf.PerlinNoise(x / zoom, y / zoom) * amp;
+
+                // Just setting this back to normal
+                verticalPos = 0;
+
+                cubes[x, y] = Instantiate(cubePrefab, new Vector3(x, verticalPos, y), Quaternion.identity);
 
             }
         }
@@ -48,7 +75,7 @@ public class GridController : MonoBehaviour
 
     public void MakeNodes()
     {
-        Pathfinding.Node[,] nodes = new Pathfinding.Node[cubes.GetLength(0), cubes.GetLength(1)];
+        nodes = new Pathfinding.Node[cubes.GetLength(0), cubes.GetLength(1)];
 
         for(int x = 0; x < cubes.GetLength(0); x++)
         {
@@ -100,27 +127,20 @@ public class GridController : MonoBehaviour
                 if (neighbor8 != null) n.neighbors.Add(neighbor8);
             }
         }
-
-        Pathfinding.Node start = Lookup(helperStart.position, nodes);
-        Pathfinding.Node end = Lookup(helperEnd.position, nodes);
-
-        List<Pathfinding.Node> path = Pathfinding.Solve(start, end);
-
-        // Set up rendering the path for line renderer
-        Vector3[] positions = new Vector3[path.Count];
-
-        for (int i = 0; i < path.Count; i++)
-        {
-            positions[i] = path[i].pos + new Vector3(0, .5f, 0);
-        }
-        linePath.positionCount = positions.Length;
-        linePath.SetPositions(positions);
     }
 
-    public Pathfinding.Node Lookup(Vector3 pos, Pathfinding.Node[,] nodes)
+    public Pathfinding.Node Lookup(Vector3 pos)
     {
+        if (nodes == null)
+        {
+            MakeNodes();
+        }
+
         float w = 1;
         float h = 1;
+
+        pos.x += w / 2;
+        pos.z += h / 2;
 
         int x = (int)(pos.x / w);
         int y = (int)(pos.z / h);

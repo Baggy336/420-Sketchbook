@@ -34,11 +34,16 @@ public class TerrainCube : MonoBehaviour
 
     private void OnMouseDown()
     {
+        // change this cube's type
         type += 1;
 
         if ((int)type > 2) type = 0;
 
+        // update the cube's artwork
         UpdateArt();
+
+        // rebuild the nodes array
+        if (GridController.singleton) GridController.singleton.MakeNodes();
     }
 
     void UpdateArt()
