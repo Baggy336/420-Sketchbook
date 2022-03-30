@@ -174,10 +174,10 @@ MonoBehaviour:
   - {fileID: 1154799538017013936, guid: 02f57cb5db1256d4da3c1a7a3e23c28d, type: 3}
   - {fileID: 8567761293586174161, guid: 641196e6907c0844e8c4b91c0cc9f70a, type: 3}
   prefabPlant: {fileID: 5626454677686843023, guid: 7545799dfcca1cb4795b6ad18291163b, type: 3}
-  citySize: 31
+  citySize: 25
   objectSpacing: 7
-  buildingSpacing: 14
-  plantSpacing: 2
+  buildingSpacing: 11
+  plantSpacing: 8
 --- !u!1 &629044608
 GameObject:
   m_ObjectHideFlags: 0
