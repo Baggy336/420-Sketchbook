@@ -5,7 +5,9 @@ using UnityEngine;
 public enum FloorType
 {
     Basic,
-    Wall
+    Wall,
+    StartTile,
+    EndTile
 }
 public class Terrain : MonoBehaviour
 {
@@ -17,6 +19,8 @@ public class Terrain : MonoBehaviour
         {
             if (type == FloorType.Basic) return 1;
             if (type == FloorType.Wall) return 9999;
+            if (type == FloorType.StartTile) return 2;
+            if (type == FloorType.EndTile) return 1;
             return 1;
         }
     }

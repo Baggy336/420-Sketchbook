@@ -15,6 +15,7 @@ public class UnitMovement : MonoBehaviour
     private void Start()
     {
         endPos = pathList[pathList.Count - 1];
+        Pathfinding1._instance.FindPath(this.transform.position, endPos);
     }
 
     private void Update()
