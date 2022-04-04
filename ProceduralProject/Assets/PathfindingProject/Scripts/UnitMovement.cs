@@ -14,7 +14,9 @@ public class UnitMovement : MonoBehaviour
 
     private void Start()
     {
-        endPos = pathList[pathList.Count - 1];
+        endPos = new Vector3(5, 0, 5);
+        SetPosition(endPos);
+
         Pathfinding1._instance.FindPath(this.transform.position, endPos);
     }
 
