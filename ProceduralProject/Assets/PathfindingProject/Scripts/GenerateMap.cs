@@ -42,7 +42,7 @@ public class GenerateMap : MonoBehaviour
             {
                 float verticalPos = Mathf.PerlinNoise(x / zoom, z / zoom) * amp;
 
-                verticalPos = 0;
+                //verticalPos = 0;
 
                 tiles[x, z] = Instantiate(tileArt, new Vector3(x, verticalPos, z), Quaternion.identity);
             }

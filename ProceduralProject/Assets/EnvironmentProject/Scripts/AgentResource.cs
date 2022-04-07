@@ -8,20 +8,22 @@ public class AgentResource : MonoBehaviour
 
     public int resource = 4;
 
-    private int cooldown = 0;
+    private float cooldown = 0;
+
 
     private void Update()
     {
         if (resource < maxResource)
         {
-            cooldown--;
+            cooldown -= Time.deltaTime;
 
             if (cooldown <= 0 && resource < maxResource)
             {
                 resource++;
 
-                cooldown = (int)Random.Range(60, 90);
+                cooldown = Random.Range(60, 90);
             }
         }
     }
+
 }

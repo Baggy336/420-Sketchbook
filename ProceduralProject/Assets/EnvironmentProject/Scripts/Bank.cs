@@ -13,6 +13,7 @@ public static class Bank
     {
         resource += amt;
         if (onResourceAmtChange != null) onResourceAmtChange(null, EventArgs.Empty);
+        Debug.Log(resource);
     }
 
     public static int GetResourceAmt()
