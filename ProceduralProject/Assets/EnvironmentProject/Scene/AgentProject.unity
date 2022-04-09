@@ -153,7 +153,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agents: []
+  predetors: []
   agent: {fileID: 7466832148030062342, guid: 8c40482cd5acf664597087c47e7b719d, type: 3}
+  predetor: {fileID: 8753154059218019228, guid: d671d3d90f22d8e44b9b7f574a443669, type: 3}
 --- !u!4 &613042163
 Transform:
   m_ObjectHideFlags: 0

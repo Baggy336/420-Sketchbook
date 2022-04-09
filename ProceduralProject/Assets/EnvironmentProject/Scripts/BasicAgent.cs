@@ -19,8 +19,8 @@ public class BasicAgent : MonoBehaviour
     [Range(5, 30)]
     public float maxSpeed = 10;
 
-    public float visDis = 100;
-    public float visAngle = 180;
+    public float visDis = 15;
+    public float visAngle = 80;
     public float cohesionRad = 100;
     public float alignRad = 40;
     public float separationRad = 10;
@@ -79,7 +79,7 @@ public class BasicAgent : MonoBehaviour
 
             if (target)
             {
-                transform.position = AnimMath.Lerp(transform.position, target.position, .25f);
+                transform.position = AnimMath.Lerp(transform.position, target.position, .99f);
             }
 
             if (disToTarget <= 2)
@@ -97,7 +97,7 @@ public class BasicAgent : MonoBehaviour
             // Fly to the nest and deposit
             if (target)
             {
-                transform.position = AnimMath.Lerp(transform.position, target.position, .25f);
+                transform.position = AnimMath.Lerp(transform.position, target.position, .99f);
             }
 
             if (disToTarget <= 2)
@@ -105,6 +105,11 @@ public class BasicAgent : MonoBehaviour
                 DepositResource();
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        FlockController.RemoveAgent(this);
     }
 
     // Euler physics integration
