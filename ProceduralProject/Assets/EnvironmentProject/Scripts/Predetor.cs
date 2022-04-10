@@ -16,7 +16,7 @@ public class Predetor : MonoBehaviour
 
     void Start()
     {
-        hungerCooldown = Random.Range(100f, 200f);
+        hungerCooldown = Random.Range(30f, 200f);
         newSpotCooldown = Random.Range(5f, 15f);
     }
 
@@ -41,7 +41,7 @@ public class Predetor : MonoBehaviour
             {
                 Destroy(target.gameObject);
                 isHungry = false;
-                hungerCooldown = Random.Range(100f, 200f);
+                hungerCooldown = Random.Range(30f, 200f);
             }
         }
         else if (!target && newSpotCooldown <= 0)

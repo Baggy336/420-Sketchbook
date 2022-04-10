@@ -69,8 +69,6 @@ public class BasicAgent : MonoBehaviour
         if (cooldownWantResource <= 0) cooldownScan -= Time.deltaTime;
         if (cooldownScan <= 0) cooldownSelect -= Time.deltaTime;
 
-        if (target) disToTarget = (target.transform.position - transform.position).sqrMagnitude;
-
         // if the agent wants a resource and does not have one
         if (wantsResource && !hasResource && cooldownWantResource <= 0)
         {
@@ -79,7 +77,8 @@ public class BasicAgent : MonoBehaviour
 
             if (target)
             {
-                transform.position = AnimMath.Lerp(transform.position, target.position, .99f);
+                disToTarget = (target.transform.position - transform.position).sqrMagnitude;
+                transform.position = AnimMath.Lerp(transform.position, target.position, .005f);
             }
 
             if (disToTarget <= 2)
@@ -97,7 +96,7 @@ public class BasicAgent : MonoBehaviour
             // Fly to the nest and deposit
             if (target)
             {
-                transform.position = AnimMath.Lerp(transform.position, target.position, .99f);
+                transform.position = AnimMath.Lerp(transform.position, target.position, .005f);
             }
 
             if (disToTarget <= 2)
