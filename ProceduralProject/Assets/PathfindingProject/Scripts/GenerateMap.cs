@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GenerateMap : MonoBehaviour
 {
+    private GridSystem<Pathfinder.Square> grid;
+
     delegate Pathfinder.Square Lookup(int x, int z);
 
     public static GenerateMap _instance;
@@ -12,12 +14,15 @@ public class GenerateMap : MonoBehaviour
     public Terrain tileArt;
 
     private Terrain[,] tiles;
-    private Pathfinder.Square[,] squares;
+    public Pathfinder.Square[,] squares;
 
     public int mapSize = 19;
 
     private void Start()
     {
+        int cellSize = 1;
+        grid = new GridSystem<Pathfinder.Square>(mapSize, mapSize, cellSize, new Vector3(0, .11f, 0), (GridSystem<Pathfinder.Square> mapSize, int x, int z) => new Pathfinder.Square());
+
         if (instance != null)
         {
             Destroy(gameObject);
@@ -42,7 +47,7 @@ public class GenerateMap : MonoBehaviour
             {
                 float verticalPos = Mathf.PerlinNoise(x / zoom, z / zoom) * amp;
 
-                //verticalPos = 0;
+                verticalPos = 0;
 
                 tiles[x, z] = Instantiate(tileArt, new Vector3(x, verticalPos, z), Quaternion.identity);
             }
@@ -104,7 +109,7 @@ public class GenerateMap : MonoBehaviour
 
     public Pathfinder.Square LookupTile(Vector3 pos)
     {
-        if (squares == null) MakeMap();
+        if (squares == null) MakeTiles();
 
         float w = 1;
         float h = 1;

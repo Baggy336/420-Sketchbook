@@ -65,7 +65,7 @@ public class GridController : MonoBehaviour
                 float verticalPos = Mathf.PerlinNoise(x / zoom, y / zoom) * amp;
 
                 // Just setting this back to normal
-                //verticalPos = 0;
+                verticalPos = 0;
 
                 cubes[x, y] = Instantiate(cubePrefab, new Vector3(x, verticalPos, y), Quaternion.identity);
 

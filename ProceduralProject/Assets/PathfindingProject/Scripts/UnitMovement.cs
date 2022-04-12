@@ -6,22 +6,23 @@ public class UnitMovement : MonoBehaviour
 {
     public int currentStep = 0;
 
-    public float speed = 20f;
-
     public Vector3 endPos;
 
-    public List<Vector3> pathList = new List<Vector3>();
+    public float calcCooldown = 0;
+
+    public List<Pathfinder.Square> pathList = new List<Pathfinder.Square>();
 
     private void Start()
     {
-        endPos = new Vector3(5, 0, 5);
-        SetPosition(endPos);
-
-        Pathfinding1._instance.FindPath(this.transform.position, endPos);
+        endPos = new Vector3(18, 0, 18);
+        CalcPath();
     }
 
     private void Update()
     {
+        calcCooldown -= Time.deltaTime;
+
+        if (calcCooldown <= 0) CalcPath();
         WalkPath();
     }
 
@@ -30,31 +31,27 @@ public class UnitMovement : MonoBehaviour
         pathList = null;
     }
 
-    private void WalkPath()
+    private void CalcPath()
     {
-        if (pathList != null)
-        {
-            Vector3 targetPos = pathList[currentStep];
-            if (Vector3.Distance(transform.position, targetPos) > 1f)
-            {
-                Vector3 moveDir = (targetPos - transform.position).normalized;
 
-                float disBefore = Vector3.Distance(transform.position, targetPos);
-                transform.position = transform.position + moveDir * speed * Time.deltaTime;
-            }
-            else
+            Pathfinder.Square start = GenerateMap.instance.LookupTile(transform.position);
+            Pathfinder.Square end = GenerateMap.instance.LookupTile(endPos);
+
+            if (start == null || end == null || start == end)
             {
-                currentStep++;
-                if (currentStep >= pathList.Count)
-                {
-                    EmptyList();
-                }
+                pathList.Clear();
+
+                return;
             }
-        }
-        else
-        {
-            EmptyList();
-        }
+
+            pathList = Pathfinder.FindPath(start, end);
+            Vector3[] steps = new Vector3[pathList.Count];
+
+            for (int i = 0; i < pathList.Count; i++)
+            {
+                steps[i] = pathList[i].pos;
+            }
+        
     }
 
     public Vector3 GetPos()
@@ -62,15 +59,18 @@ public class UnitMovement : MonoBehaviour
         return transform.position;
     }
 
-    public void SetPosition(Vector3 targetPos)
+    public void WalkPath()
     {
-        currentStep = 0;
-        pathList = Pathfinding1._instance.FindPath(GetPos(), targetPos);
+        if (pathList == null) return;
+        if (pathList.Count < 2) return;
 
-        if (pathList != null && pathList.Count > 1)
+        Vector3 target = pathList[1].pos;
+        transform.position = AnimMath.Lerp(transform.position, target, .005f);
+
+        float dis = (target - transform.position).magnitude;
+        if (dis < .2f)
         {
-            pathList.RemoveAt(0);
+            calcCooldown = 3;
         }
-
     }
 }

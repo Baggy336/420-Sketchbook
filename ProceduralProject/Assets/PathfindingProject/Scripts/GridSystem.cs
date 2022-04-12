@@ -14,6 +14,9 @@ public class GridSystem<TGridObject>
     // This integer is used for the in world text
     public const int sortingOrderDefault = 5000;
 
+    public static GridSystem<TGridObject> _instance;
+    public static GridSystem<TGridObject> instance { get; private set; }
+
     // Use the event handler to make behaviors when a grid value has changed
     public event EventHandler<OnGridValueChangedEventArgs> OnGridValueChanged;
 
@@ -98,7 +101,7 @@ public class GridSystem<TGridObject>
                 for (int z = 0; z < gridSquares.GetLength(1); z++)
                 {
                     // On each square, create text in it's center to display the coordinates
-                    debugText[x, z] = CreateWorldText(gridSquares[x, z].ToString(), null, GetWorldPos(x, z) + new Vector3(cellSize, cellSize) * .5f, 20, Color.white, TextAnchor.MiddleCenter);
+                    //debugText[x, z] = CreateWorldText(gridSquares[x, z].ToString(), null, GetWorldPos(x, z) + new Vector3(cellSize, cellSize) * .5f, 20, Color.white, TextAnchor.MiddleCenter);
                     Debug.DrawLine(GetWorldPos(x, z), GetWorldPos(x, z + 1), Color.white, 100f);                   
                     Debug.DrawLine(GetWorldPos(x, z), GetWorldPos(x + 1, z), Color.white, 100f);
 
@@ -193,11 +196,11 @@ public class GridSystem<TGridObject>
     /// <param name="textAlignment"></param>
     /// <param name="sortingOrder"></param>
     /// <returns></returns>
-    public static TextMesh CreateWorldText(string text, Transform parent = null, Vector3 localPosition = default(Vector3), int fontSize = 30, Color? color = null, TextAnchor textAnchor = TextAnchor.UpperLeft, TextAlignment textAlignment = TextAlignment.Left, int sortingOrder = sortingOrderDefault)
-    {
-        if (color == null) color = Color.white;
-        return CreateWorldText(parent, text, localPosition + new Vector3(0, 0, 2.5f), fontSize, (Color)color, textAnchor, textAlignment, sortingOrder);
-    }
+    //public static TextMesh CreateWorldText(string text, Transform parent = null, Vector3 localPosition = default(Vector3), int fontSize = 30, Color? color = null, TextAnchor textAnchor = TextAnchor.UpperLeft, TextAlignment textAlignment = TextAlignment.Left, int sortingOrder = sortingOrderDefault)
+    //{
+        //if (color == null) color = Color.white;
+        //return CreateWorldText(parent, text, localPosition + new Vector3(0, 0, 2.5f), fontSize, (Color)color, textAnchor, textAlignment, sortingOrder);
+    //}
 
     /// <summary>
     /// Defines parameters for the text within the grid spaces
