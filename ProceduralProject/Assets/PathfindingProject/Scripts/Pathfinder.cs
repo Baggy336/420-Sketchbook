@@ -20,7 +20,7 @@ public class Pathfinder
         {
             get
             {
-                return gCost = hCost;
+                return gCost + hCost;
             }
         }
 

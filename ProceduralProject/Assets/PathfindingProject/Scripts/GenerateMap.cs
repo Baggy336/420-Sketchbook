@@ -21,7 +21,7 @@ public class GenerateMap : MonoBehaviour
     private void Start()
     {
         int cellSize = 1;
-        grid = new GridSystem<Pathfinder.Square>(mapSize, mapSize, cellSize, new Vector3(0, .11f, 0), (GridSystem<Pathfinder.Square> mapSize, int x, int z) => new Pathfinder.Square());
+        grid = new GridSystem<Pathfinder.Square>(mapSize, mapSize, cellSize, new Vector3(-.5f, .11f, -.5f), (GridSystem<Pathfinder.Square> mapSize, int x, int z) => new Pathfinder.Square());
 
         if (instance != null)
         {
@@ -54,7 +54,7 @@ public class GenerateMap : MonoBehaviour
         }
     }
 
-    void MakeTiles()
+    public void MakeTiles()
     {
         squares = new Pathfinder.Square[tiles.GetLength(0), tiles.GetLength(1)];
 
