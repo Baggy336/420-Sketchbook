@@ -14,7 +14,8 @@ public class Tower : MonoBehaviour
 
     private float scanCD = 2;
     private float pickCD = 2;
-    private float attackCD = 3f;
+    private float attackCD = .5f;
+    private float instantiateCD = 2f;
 
     private void Update()
     {
@@ -34,9 +35,13 @@ public class Tower : MonoBehaviour
         Projectile projectile;
         if (target == null) return;
 
-        projectile = Instantiate(prefabBullet, transform.position, Quaternion.identity);
-        projectile.target = target;
-
+        instantiateCD -= Time.deltaTime;
+        if (instantiateCD <= 0)
+        {
+            projectile = Instantiate(prefabBullet, transform.position, Quaternion.identity);
+            projectile.target = target;
+        }
+       
     }
 
     private bool CanSeeUnit(Transform u)
@@ -80,6 +85,7 @@ public class Tower : MonoBehaviour
         // Loop throught the targets, and find the closest TargetableThing
         foreach (UnitMovement um in units)
         {
+            if (!um) return;
             float dd = (um.transform.position - transform.position).sqrMagnitude;
 
             if (dd < closestDisSoFar || target == null)

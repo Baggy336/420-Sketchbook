@@ -13,8 +13,8 @@ public class UnitMovement : MonoBehaviour
     public List<Pathfinder.Square> pathList = new List<Pathfinder.Square>();
 
     private void Start()
-    {       
-        endPos = new Vector3(18, 0, 18);
+    {
+        endPos = new Vector3(18, .25f, 18);
         CalcPath();
     }
 
@@ -64,7 +64,7 @@ public class UnitMovement : MonoBehaviour
         if (pathList == null) return;
         if (pathList.Count < 2) return;
 
-        Vector3 target = pathList[1].pos;
+        Vector3 target = pathList[1].pos + new Vector3(0, .25f, 0);
         transform.position = AnimMath.Lerp(transform.position, target, .005f);
 
         float dis = (target - transform.position).magnitude;

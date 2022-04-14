@@ -14,7 +14,7 @@ public class Projectile : MonoBehaviour
 
     private void Start()
     {
-        destroyCountdown = 4;
+        destroyCountdown = 2;
         vToTarget = (target.position - transform.position).normalized;
     }
 
@@ -33,7 +33,7 @@ public class Projectile : MonoBehaviour
             HealthSystem targetHealth = target.GetComponent<HealthSystem>();
             if (targetHealth)
             {
-                targetHealth.TakeDamage(25);
+                targetHealth.TakeDamage(1);
             }
             Destroy(gameObject);
         }

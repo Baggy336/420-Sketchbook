@@ -14,7 +14,7 @@ public class SpawnUnits : MonoBehaviour
 
         if (unitSpawnCooldown <= 0)
         {
-            Instantiate(unitToSpawn, new Vector3(0, 0, 0), Quaternion.identity);
+            Instantiate(unitToSpawn, new Vector3(0, .25f, 0), Quaternion.identity);
             unitSpawnCooldown = Random.Range(3, 7);
         }
     }

@@ -12,6 +12,12 @@ public class HealthSystem : MonoBehaviour
     {
         health = healthMax;
     }
+
+    private void Update()
+    {
+        
+    }
+
     public void TakeDamage(float amt)
     {
         if (amt <= 0) return;
