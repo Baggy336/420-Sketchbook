@@ -12,7 +12,7 @@ public enum FloorType
 }
 public class Terrain : MonoBehaviour
 {
-    public FloorType type = FloorType.Basic;
+    public FloorType type;
     public Transform wall;
     public Transform tower;
     private BoxCollider box;
@@ -36,7 +36,17 @@ public class Terrain : MonoBehaviour
 
     void OnMouseDown()
     {
-        type += 1;
+        if (ResourceBank.instance.resources >= 5)
+        {
+            ResourceBank.instance.PayCost(5);
+            type += 1;
+            if ((int)type == 2) type = FloorType.Tower;
+        }
+        else
+        {
+            return;
+        }
+        
 
         UpdateArt();
 
@@ -45,7 +55,18 @@ public class Terrain : MonoBehaviour
 
     void UpdateArt()
     {
-        bool isWall = type == FloorType.Wall;
+        bool isTower = type == FloorType.Tower;
+        bool isWall = false;
+        
+        if (!isTower)
+        {
+            isWall = type == FloorType.Wall;
+        }
+        else if (isTower)
+        {
+            isWall = true;
+        }
+        
 
         float yPos = isWall ? .44f : 0f;
         float h = isWall ? 1.1f : .2f;
@@ -54,6 +75,11 @@ public class Terrain : MonoBehaviour
         box.center = new Vector3(0, yPos, 0);
 
         if (wall) wall.gameObject.SetActive(isWall);
-        if (isWall && tower) tower.gameObject.SetActive(type == FloorType.Tower);
+
+        if (tower)
+        {
+            
+            tower.gameObject.SetActive(isTower);
+        }
     }
 }

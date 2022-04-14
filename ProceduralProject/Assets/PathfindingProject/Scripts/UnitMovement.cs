@@ -13,7 +13,7 @@ public class UnitMovement : MonoBehaviour
     public List<Pathfinder.Square> pathList = new List<Pathfinder.Square>();
 
     private void Start()
-    {
+    {       
         endPos = new Vector3(18, 0, 18);
         CalcPath();
     }
