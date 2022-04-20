@@ -38,88 +38,74 @@ public class CityData
         cityBuildings = new int[buildingRes, buildingRes];
         cityPlants = new int[res, res];
 
-        MakeRoads(BuildingType.Street, BuildingType.Street);
-        MakeRoads(BuildingType.Street, BuildingType.Street);
-        MakeRoads(BuildingType.Street, BuildingType.Street);
-        MakeRoads(BuildingType.Street, BuildingType.Street);
-        MakeBuildings(BuildingType.Skyscraper);
-        MakeBuildings(BuildingType.Average);
-        MakeBuildings(BuildingType.Long);
-        MakeBuildings(BuildingType.Stubby);
-        SpawnFoliage(BuildingType.Vegetation);
-        SpawnFoliage(BuildingType.Vegetation);
-        SpawnFoliage(BuildingType.Vegetation);
-        SpawnFoliage(BuildingType.Vegetation);
-        SpawnFoliage(BuildingType.Vegetation);
-        SpawnFoliage(BuildingType.Vegetation);
-        SpawnFoliage(BuildingType.Vegetation);
-        SpawnFoliage(BuildingType.Vegetation);
-        SpawnFoliage(BuildingType.Vegetation);
-
+        MakeRoads(BuildingType.Street, BuildingType.Street, 4);
     }
-    private void MakeRoads(BuildingType s, BuildingType e)
+    private void MakeRoads(BuildingType s, BuildingType e, int iterations)
     {
-        // Select the start of the road
-        int x = Random.Range(0, res);
-        int y = Random.Range(0, res);
-
-        int half = res / 2;
-
-        // Choose the ending of the roads
-        int endX = Random.Range(5, half);
-        int endY = Random.Range(5, half);
-
-        // If the end is in the same quadrant as the start, push it to the opposite quadrant
-        if (x < half) endX += half;
-        if (y < half) endY += half;
-
-        // Set a start and end to the road
-        SetRoad(x, y, (int)s);
-        SetRoad(endX, endY, (int)e);
-
-        // Walk down the roads
-        while (x != endX || y != endY)
+        while (iterations > 0)
         {
-            int dir = Random.Range(0, 4);
-            int dis = Random.Range(2, 6);
+            // Select the start of the road
+            int x = Random.Range(0, res);
+            int y = Random.Range(0, res);
 
-            int disX = endX - x;
-            int disY = endY - y;
+            int half = res / 2;
 
-            // 25% of the time, move in a random direction
-            if (Random.Range(0, 100) < 75)
+            // Choose the ending of the roads
+            int endX = Random.Range(5, half);
+            int endY = Random.Range(5, half);
+
+            // If the end is in the same quadrant as the start, push it to the opposite quadrant
+            if (x < half) endX += half;
+            if (y < half) endY += half;
+
+            // Set a start and end to the road
+            SetRoad(x, y, (int)s);
+            SetRoad(endX, endY, (int)e);
+
+            // Walk down the roads
+            while (x != endX || y != endY)
             {
-                // Pick whichever direction is closer to the target
-                if (Mathf.Abs(disX) > Mathf.Abs(disY))
+                int dir = Random.Range(0, 4);
+                int dis = Random.Range(2, 6);
+
+                int disX = endX - x;
+                int disY = endY - y;
+
+                // 25% of the time, move in a random direction
+                if (Random.Range(0, 100) < 75)
                 {
-                    dir = (disX > 0) ? 3 : 2;
+                    // Pick whichever direction is closer to the target
+                    if (Mathf.Abs(disX) > Mathf.Abs(disY))
+                    {
+                        dir = (disX > 0) ? 3 : 2;
+                    }
+                    else
+                    {
+                        dir = (disY > 0) ? 1 : 0;
+                    }
                 }
-                else
+
+                for (int i = 0; i < dis; i++)
                 {
-                    dir = (disY > 0) ? 1 : 0;
+                    if (dir == 0) y--;
+                    if (dir == 1) y++;
+                    if (dir == 2) x--;
+                    if (dir == 3) x++;
+
+                    // Make sure the road does not go outside the map
+                    x = Mathf.Clamp(x, 0, res - 1);
+                    y = Mathf.Clamp(y, 0, res - 1);
+
+                    // If the road is in an empty spot
+                    if (GetRoad(x, y) == 0)
+                    {
+                        // Set the road to a road
+                        SetRoad(x, y, 6);
+                    }
                 }
             }
-
-            for (int i = 0; i < dis; i++)
-            {
-                if (dir == 0) y--;
-                if (dir == 1) y++;
-                if (dir == 2) x--;
-                if (dir == 3) x++;
-
-                // Make sure the road does not go outside the map
-                x = Mathf.Clamp(x, 0, res - 1);
-                y = Mathf.Clamp(y, 0, res - 1);
-
-                // If the road is in an empty spot
-                if (GetRoad(x, y) == 0)
-                {
-                    // Set the road to a road
-                    SetRoad(x, y, 6);
-                }
-            }
+            iterations--;
         }
-
     }
     // Create city buildings
     private void MakeBuildings(BuildingType build)
@@ -185,6 +171,18 @@ public class CityData
             }
         }
     }
+
+    void CheckNeighbors()
+    {
+        for (int i = 0; i < cityBlocks.Length; i++)
+        {
+            for (int x = 0; x < cityBlocks.GetLength(i); x++)
+            {
+
+            }
+        }
+    }
+
     // Generate foliage
     public void SpawnFoliage(BuildingType p)
     {
