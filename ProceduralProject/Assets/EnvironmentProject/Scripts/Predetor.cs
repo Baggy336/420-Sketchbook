@@ -16,6 +16,7 @@ public class Predetor : MonoBehaviour
 
     void Start()
     {
+        newPos = new Vector3(Random.Range(-9.5f, 9.5f), Random.Range(-9.5f, 9.5f), Random.Range(-9.5f, 9.5f));
         hungerCooldown = Random.Range(30f, 200f);
         newSpotCooldown = Random.Range(5f, 15f);
     }
@@ -46,7 +47,7 @@ public class Predetor : MonoBehaviour
         }
         else if (!target && newSpotCooldown <= 0)
         {
-            newPos = new Vector3(Random.Range(-10f, 10f), Random.Range(-10f, 10f), Random.Range(-10f, 10f));
+            newPos = new Vector3(Random.Range(-9.5f, 9.5f), Random.Range(-9.5f, 9.5f), Random.Range(-9.5f, 9.5f));
 
             newSpotCooldown = Random.Range(5f, 15f);
         }
