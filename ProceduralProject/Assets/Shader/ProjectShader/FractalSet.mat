@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: FractalSet
-  m_Shader: {fileID: 4800000, guid: 18e3e738e1715084e95a0c401efe21e5, type: 3}
+  m_Shader: {fileID: 4800000, guid: 72c06396f7958c04f9a10d7d976f2669, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -57,7 +57,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Aspect: 1
+    - _Aspect: 1.07
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
@@ -78,6 +78,7 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _Pan: {r: 0.35, g: 0, b: 1, a: 1}
-    - _Zoom: {r: 1.63, g: 1.23, b: 2.48, a: 2.48}
+    - _Pan: {r: 0.6, g: 0, b: 1, a: 1}
+    - _Seed: {r: -0.69, g: -0.42, b: 0.5, a: 0.5}
+    - _Zoom: {r: 1.76, g: 1.23, b: 2.48, a: 2.48}
   m_BuildTextureStacks: []

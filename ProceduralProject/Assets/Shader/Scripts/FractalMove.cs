@@ -16,11 +16,10 @@ public enum Properties
 
 public class FractalMove : MonoBehaviour
 {
-    public static FractalMove move;
     public Material fractalMat;
     public Properties property;
 
-    public void UpdateFractal(float a)
+    public void UpdateFractal(Properties property, float a)
     {
         var current = fractalMat.GetVector("_Zoom");
         var currentP = fractalMat.GetVector("_Pan");
