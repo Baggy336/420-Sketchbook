@@ -18,7 +18,7 @@ public class StretchAgent : MonoBehaviour
 
     public void TakeData(float amp)
     {
-        transform.localScale = Vector3.one * (transform.localScale.y + amp);
+        transform.localScale = Vector3.one * (transform.localScale.y + amp / 2);
     }
 
     private void Update()

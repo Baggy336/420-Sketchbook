@@ -14,6 +14,7 @@ public class MusicData : MonoBehaviour
 
     public int bands = 512;
 
+    public float[] freqBands = new float[512];
     private float height = 10;
 
     private List<StretchAgent> agents = new List<StretchAgent>();
@@ -49,7 +50,7 @@ public class MusicData : MonoBehaviour
 
     private void BandData()
     {
-        float[] freqBands = new float[bands];
+
         musicPlayer.GetSpectrumData(freqBands, 0, FFTWindow.Hamming);
 
         for (int i = 0; i < agents.Count; i++)

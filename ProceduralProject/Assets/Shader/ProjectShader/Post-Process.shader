@@ -1,11 +1,8 @@
-Shader "Hidden/Post-Process"
+Shader "Custom/Post-Process"
 {
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _Redness("Redness", Range(0, 1)) = 0;
-        _Green("Green", Range(0, 1)) = 0;
-        _Blue("Blue", Range(0, 1)) = 0;
     }
     SubShader
     {
@@ -41,17 +38,14 @@ Shader "Hidden/Post-Process"
             }
 
             sampler2D _MainTex;
-            float _Redness;
+
             float _Green;
             float _Blue;
 
-            fixed4 frag (v2f i) : SV_Target
+            fixed4 frag(v2f i) : SV_Target
             {
-                fixed4 col = tex2D(_MainTex, i.uv);
+                fixed4 col = tex2D(_MainTex, i.uv + float2(0, sin(i.vertex.x / 50 + _Time[1]) / 10));
                 // just invert the colors
-                col.r += _Redness;
-                col.g += _Green;
-                col.b += _Blue;
                 return col;
             }
             ENDCG
